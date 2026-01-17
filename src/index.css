@@ -1,0 +1,93 @@
+/* Google Font - Noto Sans JP for Korean & CJK support */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+
+/* Bootstrap 5 */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* PrimeReact */
+@import 'primereact/resources/themes/lara-light-blue/theme.css';
+@import 'primereact/resources/primereact.min.css';
+@import 'primeicons/primeicons.css';
+
+/* Dashkit Theme from S3 */
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/dashkit/fonts/feather/feather.min.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/dashkit/libs/flatpickr/dist/flatpickr.min.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/dashkit/libs/highlight.js/styles/vs2015.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/dashkit/libs/quill/dist/quill.core.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/dashkit/libs/select2/dist/css/select2.min.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/css/theme.min.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/css/custom-all.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/css/ruoom-tour.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/css/ruoom.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/css/payment-dev-custom.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/assets/css/font-awesome.min.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/administration/css/admin-style.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/packages/timegrid/main.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/css/bootstrap-tourist.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/assets/css/dev-custom.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/packages/core/main.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/registration/css/checkin.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/css/custom-deployment.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/administration/css/croppie.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/css/store.css');
+@import url('https://ruoom-django-static-media.s3.amazonaws.com/static/dashkit/libs/mdb-color-picker/css/style.css');
+
+/* Global Overrides */
+body {
+  margin: 0;
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom utility classes */
+.custom-login-box {
+  padding: 2rem;
+}
+
+.w-100px {
+  width: 100px;
+}
+
+.font-600 {
+  font-weight: 600;
+}
+
+/* OR separator for social login */
+.or-container {
+  align-items: center;
+  color: #ccc;
+  display: flex;
+  margin: 25px 0;
+}
+
+.line-separator {
+  background-color: #ccc;
+  flex-grow: 5;
+  height: 1px;
+}
+
+.or-label {
+  flex-grow: 1;
+  margin: 0 15px;
+  text-align: center;
+}
+
+/* Social login buttons */
+.social-container {
+  margin: auto;
+  max-width: 50%;
+}
+
+.btn-social {
+  color: #545454;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 1px #ddd;
+}
