@@ -143,33 +143,52 @@ const SignIn: FC = () => {
           </div>
 
           {/* Social Login Buttons */}
-          <div className="row">
-            <div className="social-container">
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => handleOAuthSignIn('google')}
-                style={{ textTransform: 'none' }}
-              >
-                <img
-                  width="20px"
-                  alt="Google sign-in"
-                  src="https://ruoom-django-static-media.s3.amazonaws.com/static/registration/images/google_ruoom.png"
-                />
-              </button>
-            </div>
-            <div className="social-container">
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => handleOAuthSignIn('kakao')}
-                style={{ textTransform: 'none' }}
-              >
-                <img
-                  width="20px"
-                  style={{ marginRight: '5px' }}
-                  alt="Kakao sign-in"
-                  src="https://ruoom-django-static-media.s3.amazonaws.com/static/registration/images/kakao_ruoom.png"
-                />
-              </button>
+          <div className="row mt-4">
+            <div className="col-12">
+              <div className="d-flex justify-content-center gap-3">
+                <button
+                  className="btn btn-outline-dark d-flex align-items-center justify-content-center"
+                  onClick={() => handleOAuthSignIn('google')}
+                  style={{
+                    textTransform: 'none',
+                    minWidth: '180px',
+                    height: '50px',
+                    fontSize: '16px',
+                  }}
+                >
+                  <img
+                    width="24px"
+                    height="24px"
+                    alt="Google sign-in"
+                    src="https://ruoom-django-static-media.s3.amazonaws.com/static/registration/images/google_ruoom.png"
+                    style={{ marginRight: '8px' }}
+                  />
+                  <span>Google</span>
+                </button>
+
+                <button
+                  className="btn btn-warning d-flex align-items-center justify-content-center"
+                  onClick={() => handleOAuthSignIn('kakao')}
+                  style={{
+                    textTransform: 'none',
+                    minWidth: '180px',
+                    height: '50px',
+                    fontSize: '16px',
+                    backgroundColor: '#FEE500',
+                    borderColor: '#FEE500',
+                    color: '#000',
+                  }}
+                >
+                  <img
+                    width="24px"
+                    height="24px"
+                    alt="Kakao sign-in"
+                    src="https://ruoom-django-static-media.s3.amazonaws.com/static/registration/images/kakao_ruoom.png"
+                    style={{ marginRight: '8px' }}
+                  />
+                  <span>Kakao</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -5,8 +5,16 @@ import { ROUTES } from '@/constants/routes';
 import styled from 'styled-components';
 
 import { BusinessInfoStep } from './steps/BusinessInfoStep';
-import { SpaceCreationStep } from './steps/SpaceCreationStep';
+import { SpaceCreationStep, SpaceInfo } from './steps/SpaceCreationStep';
 import { TemplateSelectionStep } from './steps/TemplateSelectionStep';
+
+interface OnboardingData {
+  businessInfo:
+    | { businessInfo?: { businessType?: string; businessName?: string } }
+    | undefined;
+  selectedTemplate: { selectedTemplate?: string } | undefined;
+  spaceInfo: { spaceInfo?: SpaceInfo } | undefined;
+}
 
 /**
  * Epic B: Onboarding Wizard
@@ -17,10 +25,10 @@ import { TemplateSelectionStep } from './steps/TemplateSelectionStep';
 const OnboardingWizard: FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
-  const [onboardingData, setOnboardingData] = useState({
-    businessInfo: null,
-    selectedTemplate: null,
-    spaceInfo: null,
+  const [onboardingData, setOnboardingData] = useState<OnboardingData>({
+    businessInfo: undefined,
+    selectedTemplate: undefined,
+    spaceInfo: undefined,
   });
 
   const totalSteps = 3;
@@ -54,7 +62,9 @@ const OnboardingWizard: FC = () => {
           <TemplateSelectionStep
             onNext={handleNext}
             onBack={handleBack}
-            businessInfo={onboardingData.businessInfo}
+            {...(onboardingData.businessInfo && {
+              businessInfo: onboardingData.businessInfo,
+            })}
           />
         );
       case 3:
@@ -63,6 +73,9 @@ const OnboardingWizard: FC = () => {
             onNext={handleNext}
             onBack={handleBack}
             selectedTemplate={onboardingData.selectedTemplate}
+            {...(onboardingData.businessInfo && {
+              businessInfo: onboardingData.businessInfo,
+            })}
           />
         );
       default:

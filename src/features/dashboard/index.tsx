@@ -56,7 +56,14 @@ const BusinessDashboard: FC = () => {
                       </p>
                     </div>
                     <div className="col-12 col-sm-auto mt-3 mt-sm-0">
-                      <button className="btn btn-primary">New Booking</button>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => navigate(ROUTES.BUSINESS.CALENDAR)}
+                      >
+                        <i className="fe fe-plus mr-1" />
+                        New Booking
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -65,7 +72,11 @@ const BusinessDashboard: FC = () => {
                   {/* Metrics Grid */}
                   <div className="row mb-4">
                     <div className="col-12 col-sm-6 col-lg-3 mb-3">
-                      <div className="card">
+                      <div
+                        className="card"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate(ROUTES.BUSINESS.BOOKINGS)}
+                      >
                         <div className="card-body text-center">
                           <div style={{ fontSize: '2rem' }}>📅</div>
                           <h2 className="mt-2 mb-0">24</h2>
@@ -78,7 +89,11 @@ const BusinessDashboard: FC = () => {
                     </div>
 
                     <div className="col-12 col-sm-6 col-lg-3 mb-3">
-                      <div className="card">
+                      <div
+                        className="card"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate(ROUTES.BUSINESS.SETTINGS)}
+                      >
                         <div className="card-body text-center">
                           <div style={{ fontSize: '2rem' }}>💰</div>
                           <h2 className="mt-2 mb-0">₩1,250</h2>
@@ -91,7 +106,11 @@ const BusinessDashboard: FC = () => {
                     </div>
 
                     <div className="col-12 col-sm-6 col-lg-3 mb-3">
-                      <div className="card">
+                      <div
+                        className="card"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate(ROUTES.BUSINESS.CUSTOMERS)}
+                      >
                         <div className="card-body text-center">
                           <div style={{ fontSize: '2rem' }}>👥</div>
                           <h2 className="mt-2 mb-0">48</h2>
@@ -104,7 +123,11 @@ const BusinessDashboard: FC = () => {
                     </div>
 
                     <div className="col-12 col-sm-6 col-lg-3 mb-3">
-                      <div className="card">
+                      <div
+                        className="card"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate(ROUTES.BUSINESS.WEBSITE)}
+                      >
                         <div className="card-body text-center">
                           <div style={{ fontSize: '2rem' }}>⭐</div>
                           <h2 className="mt-2 mb-0">4.8</h2>
@@ -234,6 +257,32 @@ const BusinessDashboard: FC = () => {
                                   <div style={{ fontSize: '2rem' }}>🌐</div>
                                   <small className="d-block mt-2">
                                     Edit Website
+                                  </small>
+                                </div>
+                              </Link>
+                            </div>
+                            <div className="col-6 col-md-3 mb-3">
+                              <Link
+                                to={ROUTES.BUSINESS.CHAT}
+                                className="text-decoration-none"
+                              >
+                                <div className="text-center p-3 bg-light rounded">
+                                  <div style={{ fontSize: '2rem' }}>🤖</div>
+                                  <small className="d-block mt-2">
+                                    Chat Bot
+                                  </small>
+                                </div>
+                              </Link>
+                            </div>
+                            <div className="col-6 col-md-3 mb-3">
+                              <Link
+                                to={ROUTES.BUSINESS.ANALYTICS}
+                                className="text-decoration-none"
+                              >
+                                <div className="text-center p-3 bg-light rounded">
+                                  <div style={{ fontSize: '2rem' }}>📊</div>
+                                  <small className="d-block mt-2">
+                                    Analytics
                                   </small>
                                 </div>
                               </Link>

@@ -8,9 +8,20 @@ import { getCurrentUser, isAuthenticated } from '@/mocks/auth';
 // Lazy load features for code splitting
 const SignIn = lazy(() => import('@/features/auth/SignIn'));
 const SignUp = lazy(() => import('@/features/auth/SignUp'));
+const ForgotPassword = lazy(() => import('@/features/auth/ForgotPassword'));
+const ResetPassword = lazy(() => import('@/features/auth/ResetPassword'));
 const OnboardingWizard = lazy(() => import('@/features/onboarding'));
 const BusinessDashboard = lazy(() => import('@/features/dashboard'));
 const BusinessCalendar = lazy(() => import('@/features/calendar'));
+const Customers = lazy(() => import('@/features/customers'));
+const Bookings = lazy(() => import('@/features/bookings'));
+const Settings = lazy(() => import('@/features/settings'));
+const WebsiteBuilder = lazy(() => import('@/features/website-builder'));
+const ChatbotAdmin = lazy(() => import('@/features/chatbot-admin'));
+const Analytics = lazy(() => import('@/features/analytics'));
+const Availability = lazy(() => import('@/features/availability'));
+const Booking = lazy(() => import('@/features/booking'));
+const CustomerMyPage = lazy(() => import('@/features/customer-mypage'));
 const PublicWebsite = lazy(() => import('@/features/public'));
 
 // Loading fallback component
@@ -59,6 +70,11 @@ export const AppRouter: FC = () => {
         {/* Auth Routes (public) */}
         <Route path={ROUTES.AUTH.SIGN_IN} element={<SignIn />} />
         <Route path={ROUTES.AUTH.SIGN_UP} element={<SignUp />} />
+        <Route
+          path={ROUTES.AUTH.FORGOT_PASSWORD}
+          element={<ForgotPassword />}
+        />
+        <Route path={ROUTES.AUTH.RESET_PASSWORD} element={<ResetPassword />} />
 
         {/* Onboarding Routes (protected) */}
         <Route
@@ -87,9 +103,67 @@ export const AppRouter: FC = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path={ROUTES.BUSINESS.CUSTOMERS}
+          element={
+            <ProtectedRoute>
+              <Customers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.BUSINESS.BOOKINGS}
+          element={
+            <ProtectedRoute>
+              <Bookings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.BUSINESS.SETTINGS}
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.BUSINESS.WEBSITE}
+          element={
+            <ProtectedRoute>
+              <WebsiteBuilder />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.BUSINESS.CHAT}
+          element={
+            <ProtectedRoute>
+              <ChatbotAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.BUSINESS.ANALYTICS}
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/business/availability"
+          element={
+            <ProtectedRoute>
+              <Availability />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Public Website Routes (tenant-specific) */}
         <Route path={ROUTES.PUBLIC.HOME} element={<PublicWebsite />} />
+        <Route path={ROUTES.PUBLIC.BOOKING} element={<Booking />} />
+        <Route path={ROUTES.PUBLIC.MY_PAGE} element={<CustomerMyPage />} />
 
         {/* 404 - redirect to root */}
         <Route path="*" element={<RootRedirect />} />

@@ -34,6 +34,7 @@ export const ROUTES = {
     CHAT: '/business/chat',
     SETTINGS: '/business/settings',
     WEBSITE: '/business/website',
+    ANALYTICS: '/business/analytics',
     INTEGRATIONS: '/business/integrations',
   },
 

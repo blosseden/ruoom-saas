@@ -22,6 +22,34 @@ const SignUp: FC = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // 비밀번호 강도 계산
+  const calculatePasswordStrength = (pwd: string): number => {
+    let strength = 0;
+    if (pwd.length >= 8) strength += 1;
+    if (pwd.length >= 12) strength += 1;
+    if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) strength += 1;
+    if (/\d/.test(pwd)) strength += 1;
+    if (/[^a-zA-Z0-9]/.test(pwd)) strength += 1;
+    return strength;
+  };
+
+  const passwordStrength = calculatePasswordStrength(password);
+  const passwordStrengthLabel =
+    password.length === 0
+      ? ''
+      : passwordStrength <= 2
+        ? '약함'
+        : passwordStrength <= 3
+          ? '보통'
+          : '강함';
+
+  const passwordStrengthColor =
+    passwordStrength <= 2
+      ? '#dc3545'
+      : passwordStrength <= 3
+        ? '#ffc107'
+        : '#28a745';
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -205,9 +233,37 @@ const SignUp: FC = () => {
                   </span>
                 </div>
               </div>
-              <small className="form-text text-muted">
-                최소 8자 이상 입력해주세요
-              </small>
+              {/* Password Strength Indicator */}
+              {password.length > 0 && (
+                <div className="mt-2">
+                  <div className="d-flex justify-content-between align-items-center mb-1">
+                    <small className="text-muted">비밀번호 강도:</small>
+                    <small
+                      className="font-weight-bold"
+                      style={{ color: passwordStrengthColor }}
+                    >
+                      {passwordStrengthLabel}
+                    </small>
+                  </div>
+                  <div
+                    className="progress"
+                    style={{ height: '6px', marginTop: '5px' }}
+                  >
+                    <div
+                      className="progress-bar"
+                      role="progressbar"
+                      style={{
+                        width: `${(passwordStrength / 5) * 100}%`,
+                        backgroundColor: passwordStrengthColor,
+                      }}
+                    />
+                  </div>
+                  <small className="form-text text-muted mt-1">
+                    {passwordStrength < 3 &&
+                      '영문 대/소문자, 숫자, 특수문자를 조합하면 더 안전합니다.'}
+                  </small>
+                </div>
+              )}
             </div>
 
             {/* Error Message */}
@@ -241,32 +297,52 @@ const SignUp: FC = () => {
           </div>
 
           {/* Social Login Buttons */}
-          <div className="row">
-            <div className="social-container">
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => handleOAuthSignUp('google')}
-                style={{ textTransform: 'none' }}
-              >
-                <img
-                  width="20px"
-                  alt="Google sign-in"
-                  src="https://ruoom-django-static-media.s3.amazonaws.com/static/registration/images/google_ruoom.png"
-                />
-              </button>
-            </div>
-            <div className="social-container">
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => handleOAuthSignUp('kakao')}
-                style={{ textTransform: 'none' }}
-              >
-                <img
-                  width="20px"
-                  alt="Kakao sign-in"
-                  src="https://ruoom-django-static-media.s3.amazonaws.com/static/registration/images/kakao_ruoom.png"
-                />
-              </button>
+          <div className="row mt-4">
+            <div className="col-12">
+              <div className="d-flex justify-content-center gap-3">
+                <button
+                  className="btn btn-outline-dark d-flex align-items-center justify-content-center"
+                  onClick={() => handleOAuthSignUp('google')}
+                  style={{
+                    textTransform: 'none',
+                    minWidth: '180px',
+                    height: '50px',
+                    fontSize: '16px',
+                  }}
+                >
+                  <img
+                    width="24px"
+                    height="24px"
+                    alt="Google sign-in"
+                    src="https://ruoom-django-static-media.s3.amazonaws.com/static/registration/images/google_ruoom.png"
+                    style={{ marginRight: '8px' }}
+                  />
+                  <span>Google</span>
+                </button>
+
+                <button
+                  className="btn btn-warning d-flex align-items-center justify-content-center"
+                  onClick={() => handleOAuthSignUp('kakao')}
+                  style={{
+                    textTransform: 'none',
+                    minWidth: '180px',
+                    height: '50px',
+                    fontSize: '16px',
+                    backgroundColor: '#FEE500',
+                    borderColor: '#FEE500',
+                    color: '#000',
+                  }}
+                >
+                  <img
+                    width="24px"
+                    height="24px"
+                    alt="Kakao sign-in"
+                    src="https://ruoom-django-static-media.s3.amazonaws.com/static/registration/images/kakao_ruoom.png"
+                    style={{ marginRight: '8px' }}
+                  />
+                  <span>Kakao</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
