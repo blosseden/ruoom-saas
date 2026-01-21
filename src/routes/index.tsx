@@ -14,10 +14,14 @@ const OnboardingWizard = lazy(() => import('@/features/onboarding'));
 const BusinessDashboard = lazy(() => import('@/features/dashboard'));
 const BusinessCalendar = lazy(() => import('@/features/calendar'));
 const Customers = lazy(() => import('@/features/customers'));
+const CustomerDetail = lazy(() => import('@/features/customers/detail'));
+const Spaces = lazy(() => import('@/features/spaces'));
 const Bookings = lazy(() => import('@/features/bookings'));
 const Settings = lazy(() => import('@/features/settings'));
 const WebsiteBuilder = lazy(() => import('@/features/website-builder'));
 const ChatbotAdmin = lazy(() => import('@/features/chatbot-admin'));
+const Notifications = lazy(() => import('@/features/notifications'));
+const Reports = lazy(() => import('@/features/reports'));
 const Analytics = lazy(() => import('@/features/analytics'));
 const Availability = lazy(() => import('@/features/availability'));
 const Booking = lazy(() => import('@/features/booking'));
@@ -112,6 +116,22 @@ export const AppRouter: FC = () => {
           }
         />
         <Route
+          path={ROUTES.BUSINESS.CUSTOMER_DETAIL}
+          element={
+            <ProtectedRoute>
+              <CustomerDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.BUSINESS.SPACES}
+          element={
+            <ProtectedRoute>
+              <Spaces />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path={ROUTES.BUSINESS.BOOKINGS}
           element={
             <ProtectedRoute>
@@ -148,6 +168,22 @@ export const AppRouter: FC = () => {
           element={
             <ProtectedRoute>
               <Analytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.BUSINESS.NOTIFICATIONS}
+          element={
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.BUSINESS.REPORTS}
+          element={
+            <ProtectedRoute>
+              <Reports />
             </ProtectedRoute>
           }
         />

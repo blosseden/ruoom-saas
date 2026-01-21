@@ -378,7 +378,12 @@ const Customers: FC = () => {
                                   {customer.name.charAt(0)}
                                 </div>
                                 <div>
-                                  <h6 className="mb-0">{customer.name}</h6>
+                                  <Link
+                                    to={`${ROUTES.BUSINESS.CUSTOMERS}/${customer.id}`}
+                                    className="text-decoration-none"
+                                  >
+                                    <h6 className="mb-0">{customer.name}</h6>
+                                  </Link>
                                   <small className="text-muted">
                                     Since {customer.memberSince}
                                   </small>

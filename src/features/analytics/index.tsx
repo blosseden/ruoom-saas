@@ -1,22 +1,22 @@
 import { FC, useEffect, useState } from 'react';
+import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from 'chart.js';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
 
 import { ROUTES } from '@/constants/routes';
 import { getCurrentUser, mockSignOut } from '@/mocks/auth';
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  Title,
+  Tooltip,
+} from 'chart.js';
 
 // Register ChartJS components
 ChartJS.register(
@@ -298,8 +298,8 @@ const Analytics: FC = () => {
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => {
-            const value = context.raw;
+          label: (context: { raw: unknown }) => {
+            const value = context.raw as number;
             return `₩${(value / 10000).toFixed(0)}만원`;
           },
         },
@@ -309,7 +309,11 @@ const Analytics: FC = () => {
       y: {
         beginAtZero: true,
         ticks: {
-          callback: (value: any) => `₩${(value / 10000).toFixed(0)}만`,
+          callback: (value: string | number) => {
+            const numValue =
+              typeof value === 'string' ? parseFloat(value) : value;
+            return `₩${(numValue / 10000).toFixed(0)}만`;
+          },
         },
       },
     },
@@ -461,7 +465,8 @@ const Analytics: FC = () => {
   const avgMonthlyRevenue = Math.round(totalRevenue / revenueData.length);
   const totalBookings = revenueData.reduce((sum, d) => sum + d.bookings, 0);
   const avgMonthlyBookings = Math.round(totalBookings / revenueData.length);
-  const totalCustomers = customerGrowthData[customerGrowthData.length - 1].totalCustomers;
+  const totalCustomers =
+    customerGrowthData[customerGrowthData.length - 1].totalCustomers;
   const peakHour = peakHourData.reduce((max, d) =>
     d.bookings > max.bookings ? d : max,
   );
@@ -469,11 +474,15 @@ const Analytics: FC = () => {
 
   // Export functions (mock)
   const handleExportCSV = () => {
-    alert('CSV 내보내기 기능 (데모)\n\n실제 구현 시:\n- 선택된 탭의 데이터를 CSV로 변환\n- 브라우저 다운로드 트리거\n- 파일명: analytics_{tab}_{date}.csv');
+    alert(
+      'CSV 내보내기 기능 (데모)\n\n실제 구현 시:\n- 선택된 탭의 데이터를 CSV로 변환\n- 브라우저 다운로드 트리거\n- 파일명: analytics_{tab}_{date}.csv',
+    );
   };
 
   const handleExportPDF = () => {
-    alert('PDF 내보내기 기능 (데모)\n\n실제 구현 시:\n- jsPDF 또는 similar library 사용\n- 차트와 데이터를 PDF로 변환\n- 브라우저 다운로드 트리거\n- 파일명: analytics_{tab}_{date}.pdf');
+    alert(
+      'PDF 내보내기 기능 (데모)\n\n실제 구현 시:\n- jsPDF 또는 similar library 사용\n- 차트와 데이터를 PDF로 변환\n- 브라우저 다운로드 트리거\n- 파일명: analytics_{tab}_{date}.pdf',
+    );
   };
 
   const handleSignOut = async () => {
@@ -672,9 +681,12 @@ const Analytics: FC = () => {
                     <div className="row align-items-center">
                       <div className="col-md-6">
                         <div className="d-flex align-items-center">
-                          <span className="badge badge-success mr-2">실시간</span>
+                          <span className="badge badge-success mr-2">
+                            실시간
+                          </span>
                           <small className="text-muted">
-                            마지막 업데이트: {lastUpdated.toLocaleTimeString('ko-KR')}
+                            마지막 업데이트:{' '}
+                            {lastUpdated.toLocaleTimeString('ko-KR')}
                           </small>
                           <button
                             className="btn btn-sm btn-outline-primary ml-2"
@@ -1472,7 +1484,10 @@ const Analytics: FC = () => {
                   </div>
                   <div className="card-body">
                     <div style={{ height: '400px' }}>
-                      <Line data={revenueChartData} options={revenueChartOptions} />
+                      <Line
+                        data={revenueChartData}
+                        options={revenueChartOptions}
+                      />
                     </div>
                   </div>
                 </div>
@@ -1498,26 +1513,40 @@ const Analytics: FC = () => {
                         </thead>
                         <tbody>
                           {revenueData.map((data, index) => {
-                            const prevRevenue = index > 0 ? revenueData[index - 1].revenue : data.revenue;
-                            const growth = ((data.revenue - prevRevenue) / prevRevenue) * 100;
+                            const prevRevenue =
+                              index > 0
+                                ? revenueData[index - 1].revenue
+                                : data.revenue;
+                            const growth =
+                              ((data.revenue - prevRevenue) / prevRevenue) *
+                              100;
 
                             return (
                               <tr key={index}>
                                 <td>{data.month}</td>
                                 <td>
-                                  <strong>₩{(data.revenue / 10000).toFixed(0)}만원</strong>
+                                  <strong>
+                                    ₩{(data.revenue / 10000).toFixed(0)}만원
+                                  </strong>
                                 </td>
                                 <td>{data.bookings}건</td>
                                 <td>
-                                  ₩{(data.revenue / data.bookings).toFixed(0).toLocaleString()}
+                                  ₩
+                                  {(data.revenue / data.bookings)
+                                    .toFixed(0)
+                                    .toLocaleString()}
                                 </td>
                                 <td>
                                   {index === 0 ? (
                                     <span className="text-muted">-</span>
                                   ) : growth >= 0 ? (
-                                    <span className="text-success">+{growth.toFixed(1)}%</span>
+                                    <span className="text-success">
+                                      +{growth.toFixed(1)}%
+                                    </span>
                                   ) : (
-                                    <span className="text-danger">{growth.toFixed(1)}%</span>
+                                    <span className="text-danger">
+                                      {growth.toFixed(1)}%
+                                    </span>
                                   )}
                                 </td>
                               </tr>
@@ -1554,7 +1583,10 @@ const Analytics: FC = () => {
                       </div>
                       <div>
                         <h4 className="mb-0">
-                          {bookingTrendData.reduce((sum, d) => sum + d.bookings, 0)}
+                          {bookingTrendData.reduce(
+                            (sum, d) => sum + d.bookings,
+                            0,
+                          )}
                         </h4>
                         <small className="text-muted">총 예약 (7일)</small>
                         <div className="text-success small">+18.2%</div>
@@ -1582,7 +1614,10 @@ const Analytics: FC = () => {
                       </div>
                       <div>
                         <h4 className="mb-0">
-                          {bookingTrendData.reduce((sum, d) => sum + d.cancellations, 0)}
+                          {bookingTrendData.reduce(
+                            (sum, d) => sum + d.cancellations,
+                            0,
+                          )}
                         </h4>
                         <small className="text-muted">취소 (7일)</small>
                         <div className="text-danger small">-2.4%</div>
@@ -1600,7 +1635,10 @@ const Analytics: FC = () => {
                   </div>
                   <div className="card-body">
                     <div style={{ height: '350px' }}>
-                      <Line data={bookingTrendChartData} options={bookingTrendChartOptions} />
+                      <Line
+                        data={bookingTrendChartData}
+                        options={bookingTrendChartOptions}
+                      />
                     </div>
                   </div>
                 </div>
@@ -1626,8 +1664,10 @@ const Analytics: FC = () => {
                         </thead>
                         <tbody>
                           {bookingTrendData.map((data, index) => {
-                            const netBookings = data.bookings - data.cancellations;
-                            const cancelRate = (data.cancellations / data.bookings) * 100;
+                            const netBookings =
+                              data.bookings - data.cancellations;
+                            const cancelRate =
+                              (data.cancellations / data.bookings) * 100;
 
                             return (
                               <tr key={index}>
@@ -1714,7 +1754,10 @@ const Analytics: FC = () => {
                       </div>
                       <div>
                         <h4 className="mb-0">
-                          {customerGrowthData[customerGrowthData.length - 1].newCustomers}
+                          {
+                            customerGrowthData[customerGrowthData.length - 1]
+                              .newCustomers
+                          }
                         </h4>
                         <small className="text-muted">신규 고객 (이번달)</small>
                         <div className="text-success small">+17.2%</div>
@@ -1743,8 +1786,10 @@ const Analytics: FC = () => {
                       <div>
                         <h4 className="mb-0">
                           {Math.round(
-                            (customerGrowthData[customerGrowthData.length - 1].newCustomers /
-                              customerGrowthData[customerGrowthData.length - 2].newCustomers) *
+                            (customerGrowthData[customerGrowthData.length - 1]
+                              .newCustomers /
+                              customerGrowthData[customerGrowthData.length - 2]
+                                .newCustomers) *
                               100 -
                               100,
                           )}
@@ -1766,7 +1811,10 @@ const Analytics: FC = () => {
                   </div>
                   <div className="card-body">
                     <div style={{ height: '350px' }}>
-                      <Bar data={customerGrowthChartData} options={customerGrowthChartOptions} />
+                      <Bar
+                        data={customerGrowthChartData}
+                        options={customerGrowthChartOptions}
+                      />
                     </div>
                   </div>
                 </div>
@@ -1792,10 +1840,14 @@ const Analytics: FC = () => {
                         </thead>
                         <tbody>
                           {customerGrowthData.map((data, index) => {
-                            const prevData = index > 0 ? customerGrowthData[index - 1] : data;
-                            const growthRate = index > 0
-                              ? ((data.newCustomers - prevData.newCustomers) / prevData.newCustomers) * 100
-                              : 0;
+                            const prevData =
+                              index > 0 ? customerGrowthData[index - 1] : data;
+                            const growthRate =
+                              index > 0
+                                ? ((data.newCustomers - prevData.newCustomers) /
+                                    prevData.newCustomers) *
+                                  100
+                                : 0;
 
                             return (
                               <tr key={index}>
@@ -1810,20 +1862,32 @@ const Analytics: FC = () => {
                                   {index === 0 ? (
                                     <span className="text-muted">-</span>
                                   ) : growthRate >= 0 ? (
-                                    <span className="text-success">+{growthRate.toFixed(1)}%</span>
+                                    <span className="text-success">
+                                      +{growthRate.toFixed(1)}%
+                                    </span>
                                   ) : (
-                                    <span className="text-danger">{growthRate.toFixed(1)}%</span>
+                                    <span className="text-danger">
+                                      {growthRate.toFixed(1)}%
+                                    </span>
                                   )}
                                 </td>
                                 <td>
                                   {index === customerGrowthData.length - 1 ? (
-                                    <span className="badge badge-primary">현재</span>
+                                    <span className="badge badge-primary">
+                                      현재
+                                    </span>
                                   ) : growthRate > 10 ? (
-                                    <span className="badge badge-success">↑ 상승</span>
+                                    <span className="badge badge-success">
+                                      ↑ 상승
+                                    </span>
                                   ) : growthRate > 0 ? (
-                                    <span className="badge badge-info">→ 유지</span>
+                                    <span className="badge badge-info">
+                                      → 유지
+                                    </span>
                                   ) : (
-                                    <span className="badge badge-warning">↓ 하락</span>
+                                    <span className="badge badge-warning">
+                                      ↓ 하락
+                                    </span>
                                   )}
                                 </td>
                               </tr>
@@ -1861,7 +1925,9 @@ const Analytics: FC = () => {
                       <div>
                         <h4 className="mb-0">{peakHour.hour}</h4>
                         <small className="text-muted">피크 시간대</small>
-                        <div className="text-success small">{peakHour.bookings}건 예약</div>
+                        <div className="text-success small">
+                          {peakHour.bookings}건 예약
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1915,8 +1981,10 @@ const Analytics: FC = () => {
                       <div>
                         <h4 className="mb-0">
                           {Math.round(
-                            peakHourData.reduce((sum, d) => sum + d.bookings, 0) /
-                              peakHourData.length,
+                            peakHourData.reduce(
+                              (sum, d) => sum + d.bookings,
+                              0,
+                            ) / peakHourData.length,
                           )}
                         </h4>
                         <small className="text-muted">시간당 평균 예약</small>
@@ -1935,7 +2003,10 @@ const Analytics: FC = () => {
                   </div>
                   <div className="card-body">
                     <div style={{ height: '400px' }}>
-                      <Bar data={peakHoursChartData} options={peakHoursChartOptions} />
+                      <Bar
+                        data={peakHoursChartData}
+                        options={peakHoursChartOptions}
+                      />
                     </div>
                   </div>
                 </div>
@@ -1963,20 +2034,31 @@ const Analytics: FC = () => {
                           {peakHourData
                             .sort((a, b) => b.bookings - a.bookings)
                             .map((data, index) => {
-                              const totalBookings = peakHourData.reduce((sum, d) => sum + d.bookings, 0);
-                              const percentage = (data.bookings / totalBookings) * 100;
+                              const totalBookings = peakHourData.reduce(
+                                (sum, d) => sum + d.bookings,
+                                0,
+                              );
+                              const percentage =
+                                (data.bookings / totalBookings) * 100;
 
                               return (
                                 <tr key={data.hour}>
                                   <td>
                                     <strong>{data.hour}</strong>
                                   </td>
-                                  <td className="font-weight-bold">{data.bookings}건</td>
-                                  <td>₩{(data.revenue / 10000).toFixed(1)}만원</td>
+                                  <td className="font-weight-bold">
+                                    {data.bookings}건
+                                  </td>
+                                  <td>
+                                    ₩{(data.revenue / 10000).toFixed(1)}만원
+                                  </td>
                                   <td>
                                     <div
                                       className="progress"
-                                      style={{ height: '20px', minWidth: '100px' }}
+                                      style={{
+                                        height: '20px',
+                                        minWidth: '100px',
+                                      }}
                                     >
                                       <div
                                         className="progress-bar bg-primary"
@@ -1988,13 +2070,21 @@ const Analytics: FC = () => {
                                   </td>
                                   <td>
                                     {index === 0 ? (
-                                      <span className="badge badge-danger">🔥 피크</span>
+                                      <span className="badge badge-danger">
+                                        🔥 피크
+                                      </span>
                                     ) : percentage > 8 ? (
-                                      <span className="badge badge-warning">⚡ 혼잡</span>
+                                      <span className="badge badge-warning">
+                                        ⚡ 혼잡
+                                      </span>
                                     ) : percentage > 5 ? (
-                                      <span className="badge badge-info">보통</span>
+                                      <span className="badge badge-info">
+                                        보통
+                                      </span>
                                     ) : (
-                                      <span className="badge badge-secondary">여유</span>
+                                      <span className="badge badge-secondary">
+                                        여유
+                                      </span>
                                     )}
                                   </td>
                                 </tr>
@@ -2019,28 +2109,36 @@ const Analytics: FC = () => {
                       <div className="col-md-6">
                         <ul className="small mb-0">
                           <li>
-                            <strong>최대 피크:</strong> {peakHour.hour}에 가장 많은 예약 (
-                            {peakHour.bookings}건)
+                            <strong>최대 피크:</strong> {peakHour.hour}에 가장
+                            많은 예약 ({peakHour.bookings}건)
                           </li>
                           <li>
-                            <strong>운영 시간:</strong> 06:00 ~ 22:00 (17시간 운영)
+                            <strong>운영 시간:</strong> 06:00 ~ 22:00 (17시간
+                            운영)
                           </li>
                           <li>
                             <strong>총 예약:</strong>{' '}
-                            {peakHourData.reduce((sum, d) => sum + d.bookings, 0)}건
+                            {peakHourData.reduce(
+                              (sum, d) => sum + d.bookings,
+                              0,
+                            )}
+                            건
                           </li>
                         </ul>
                       </div>
                       <div className="col-md-6">
                         <ul className="small mb-0">
                           <li>
-                            <strong>권장 사항:</strong> 피크 시간대(17-20시)에 직원 추가 배치
+                            <strong>권장 사항:</strong> 피크 시간대(17-20시)에
+                            직원 추가 배치
                           </li>
                           <li>
-                            <strong>프로모션:</strong> 여유 시간대(06-09시) 할인 프로모션 고려
+                            <strong>프로모션:</strong> 여유 시간대(06-09시) 할인
+                            프로모션 고려
                           </li>
                           <li>
-                            <strong>예약 제한:</strong> 피크 시간대 온라인 예약 한도 설정 검토
+                            <strong>예약 제한:</strong> 피크 시간대 온라인 예약
+                            한도 설정 검토
                           </li>
                         </ul>
                       </div>
@@ -2103,7 +2201,10 @@ const Analytics: FC = () => {
                         <h4 className="mb-0">
                           ₩
                           {(
-                            servicePopularityData.reduce((sum, d) => sum + d.revenue, 0) / 10000
+                            servicePopularityData.reduce(
+                              (sum, d) => sum + d.revenue,
+                              0,
+                            ) / 10000
                           ).toFixed(0)}
                           만
                         </h4>
@@ -2133,7 +2234,10 @@ const Analytics: FC = () => {
                       </div>
                       <div>
                         <h4 className="mb-0">
-                          {servicePopularityData.reduce((sum, d) => sum + d.bookings, 0)}
+                          {servicePopularityData.reduce(
+                            (sum, d) => sum + d.bookings,
+                            0,
+                          )}
                         </h4>
                         <small className="text-muted">총 예약 건수</small>
                         <div className="text-muted small">5개 서비스</div>
@@ -2151,7 +2255,10 @@ const Analytics: FC = () => {
                   </div>
                   <div className="card-body">
                     <div style={{ height: '350px' }}>
-                      <Doughnut data={servicePopularityChartData} options={servicePopularityChartOptions} />
+                      <Doughnut
+                        data={servicePopularityChartData}
+                        options={servicePopularityChartOptions}
+                      />
                     </div>
                   </div>
                 </div>
@@ -2178,9 +2285,13 @@ const Analytics: FC = () => {
                             >
                               {index + 1}
                             </span>
-                            <span className="font-weight-bold">{service.service}</span>
+                            <span className="font-weight-bold">
+                              {service.service}
+                            </span>
                           </div>
-                          <span className="text-muted">{service.percentage}%</span>
+                          <span className="text-muted">
+                            {service.percentage}%
+                          </span>
                         </div>
                         <div className="progress" style={{ height: '25px' }}>
                           <div
@@ -2188,7 +2299,11 @@ const Analytics: FC = () => {
                             style={{
                               width: `${service.percentage}%`,
                               backgroundColor:
-                                index === 0 ? '#ffc107' : index === 1 ? '#28a745' : '#667eea',
+                                index === 0
+                                  ? '#ffc107'
+                                  : index === 1
+                                    ? '#28a745'
+                                    : '#667eea',
                             }}
                           >
                             {service.bookings}건
@@ -2196,7 +2311,10 @@ const Analytics: FC = () => {
                         </div>
                         <small className="text-muted">
                           ₩{(service.revenue / 10000).toFixed(0)}만원 (
-                          {Math.round(service.revenue / service.bookings).toLocaleString()}원/건)
+                          {Math.round(
+                            service.revenue / service.bookings,
+                          ).toLocaleString()}
+                          원/건)
                         </small>
                       </div>
                     ))}
@@ -2226,9 +2344,9 @@ const Analytics: FC = () => {
                         </thead>
                         <tbody>
                           {servicePopularityData.map((service, index) => {
-                            const avgPrice = Math.round(service.revenue / service.bookings);
-                            const maxBookings = servicePopularityData[0].bookings;
-                            const relativePerformance = (service.bookings / maxBookings) * 100;
+                            const avgPrice = Math.round(
+                              service.revenue / service.bookings,
+                            );
 
                             return (
                               <tr key={index}>
@@ -2238,7 +2356,8 @@ const Analytics: FC = () => {
                                     style={{
                                       minWidth: '30px',
                                       fontSize: '1rem',
-                                      background: index === 0 ? '#ffc107' : undefined,
+                                      background:
+                                        index === 0 ? '#ffc107' : undefined,
                                     }}
                                   >
                                     {index + 1}
@@ -2247,11 +2366,16 @@ const Analytics: FC = () => {
                                 <td>
                                   <strong>{service.service}</strong>
                                 </td>
-                                <td className="font-weight-bold">{service.bookings}건</td>
+                                <td className="font-weight-bold">
+                                  {service.bookings}건
+                                </td>
                                 <td>
                                   <div
                                     className="progress"
-                                    style={{ height: '20px', minWidth: '100px' }}
+                                    style={{
+                                      height: '20px',
+                                      minWidth: '100px',
+                                    }}
                                   >
                                     <div
                                       className="progress-bar"
@@ -2269,21 +2393,29 @@ const Analytics: FC = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td>₩{(service.revenue / 10000).toFixed(0)}만원</td>
                                 <td>
-                                  <strong>
-                                    ₩{avgPrice.toLocaleString()}
-                                  </strong>
+                                  ₩{(service.revenue / 10000).toFixed(0)}만원
+                                </td>
+                                <td>
+                                  <strong>₩{avgPrice.toLocaleString()}</strong>
                                 </td>
                                 <td>
                                   {index === 0 ? (
-                                    <span className="badge badge-warning">프리미엄</span>
+                                    <span className="badge badge-warning">
+                                      프리미엄
+                                    </span>
                                   ) : avgPrice > 40000 ? (
-                                    <span className="badge badge-info">고가</span>
+                                    <span className="badge badge-info">
+                                      고가
+                                    </span>
                                   ) : avgPrice > 20000 ? (
-                                    <span className="badge badge-primary">중가</span>
+                                    <span className="badge badge-primary">
+                                      중가
+                                    </span>
                                   ) : (
-                                    <span className="badge badge-secondary">가성비</span>
+                                    <span className="badge badge-secondary">
+                                      가성비
+                                    </span>
                                   )}
                                 </td>
                               </tr>
@@ -2306,13 +2438,17 @@ const Analytics: FC = () => {
                     </h6>
                     <div className="row">
                       <div className="col-md-6">
-                        <h6 className="font-weight-bold mb-2">🏆 인기 서비스</h6>
+                        <h6 className="font-weight-bold mb-2">
+                          🏆 인기 서비스
+                        </h6>
                         <ul className="small mb-3">
                           <li>
-                            <strong>{topService.service}</strong>이 전체 예약의 {topService.percentage}%를 차지
+                            <strong>{topService.service}</strong>이 전체 예약의{' '}
+                            {topService.percentage}%를 차지
                           </li>
                           <li>
-                            요가, PT, 필라테스가 상위 3개 서비스로 전체의 71% 점유
+                            요가, PT, 필라테스가 상위 3개 서비스로 전체의 71%
+                            점유
                           </li>
                           <li>PT 룸이 가장 높은 객단가 (₩50,000)</li>
                         </ul>
@@ -2320,18 +2456,23 @@ const Analytics: FC = () => {
                         <h6 className="font-weight-bold mb-2">💡 개선 제안</h6>
                         <ul className="small mb-0">
                           <li>
-                            <strong>프로모션:</strong> 하위 서비스(기구 운동) 프로모션으로 매출 다각화
+                            <strong>프로모션:</strong> 하위 서비스(기구 운동)
+                            프로모션으로 매출 다각화
                           </li>
                           <li>
-                            <strong>신규 서비스:</strong> 인기 서비스와 유사한 컨셉의 신규 서비스 개발 고려
+                            <strong>신규 서비스:</strong> 인기 서비스와 유사한
+                            컨셉의 신규 서비스 개발 고려
                           </li>
                           <li>
-                            <strong>가격 전략:</strong> 객단가 분석을 통한 동적 가격 정책 도입
+                            <strong>가격 전략:</strong> 객단가 분석을 통한 동적
+                            가격 정책 도입
                           </li>
                         </ul>
                       </div>
                       <div className="col-md-6">
-                        <h6 className="font-weight-bold mb-2">📊 매출 기준 순위</h6>
+                        <h6 className="font-weight-bold mb-2">
+                          📊 매출 기준 순위
+                        </h6>
                         <ol className="small mb-3">
                           <li>
                             <strong>PT 룸:</strong> ₩1,225만원 (객단가 ₩50,000)
@@ -2340,26 +2481,34 @@ const Analytics: FC = () => {
                             <strong>필라테스:</strong> ₩990만원 (객단가 ₩50,000)
                           </li>
                           <li>
-                            <strong>요가 클래스:</strong> ₩855만원 (객단가 ₩30,000)
+                            <strong>요가 클래스:</strong> ₩855만원 (객단가
+                            ₩30,000)
                           </li>
                           <li>
-                            <strong>그룹 클래스:</strong> ₩350만원 (객단가 ₩20,000)
+                            <strong>그룹 클래스:</strong> ₩350만원 (객단가
+                            ₩20,000)
                           </li>
                           <li>
-                            <strong>기구 운동:</strong> ₩192만원 (객단가 ₩15,000)
+                            <strong>기구 운동:</strong> ₩192만원 (객단가
+                            ₩15,000)
                           </li>
                         </ol>
 
-                        <h6 className="font-weight-bold mb-2">🎯 타겟팅 전략</h6>
+                        <h6 className="font-weight-bold mb-2">
+                          🎯 타겟팅 전략
+                        </h6>
                         <ul className="small mb-0">
                           <li>
-                            <strong>고객 세분화:</strong> PT/필라테스 회원 vs 요가/그룹 클래스 회원
+                            <strong>고객 세분화:</strong> PT/필라테스 회원 vs
+                            요가/그룹 클래스 회원
                           </li>
                           <li>
-                            <strong>추천 상품:</strong> PT 회원에게 필라테스 추천 (유사 가격대)
+                            <strong>추천 상품:</strong> PT 회원에게 필라테스
+                            추천 (유사 가격대)
                           </li>
                           <li>
-                            <strong>패키지:</strong> 요가 + 그룹 클래스 패키지로 복합 이용 유도
+                            <strong>패키지:</strong> 요가 + 그룹 클래스 패키지로
+                            복합 이용 유도
                           </li>
                         </ul>
                       </div>
