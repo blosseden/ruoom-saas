@@ -1,19 +1,12 @@
 import { FC } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import DemoApp from './demo/DemoApp';
 
-import { AppRouter } from '@/routes';
-import { RecoilRoot } from 'recoil';
+// ── Demo Mode ──────────────────────────────────────────────────────────────
+// To restore the original app, replace <DemoApp /> with:
+//   <RecoilRoot><Router><AppRouter /></Router></RecoilRoot>
+// and re-import { BrowserRouter as Router }, { AppRouter }, { RecoilRoot }
+// ──────────────────────────────────────────────────────────────────────────
 
-import './App.css';
-
-const App: FC = () => {
-  return (
-    <RecoilRoot>
-      <Router>
-        <AppRouter />
-      </Router>
-    </RecoilRoot>
-  );
-};
+const App: FC = () => <DemoApp />;
 
 export default App;
