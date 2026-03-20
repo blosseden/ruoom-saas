@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import DemoApp from './demo/DemoApp';
+import DemoApp from './DemoApp';
 
 // ── Demo Mode ──────────────────────────────────────────────────────────────
 // To restore the original app, replace <DemoApp /> with:

@@ -41,8 +41,6 @@ export const radius = {
 } as const;
 
 export const globalCSS = `
-  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
